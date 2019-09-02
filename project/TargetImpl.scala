@@ -50,4 +50,25 @@ object TargetImpl {
         }
         """
   }
+
+  object OutWatch extends TargetImpl {
+    override def imports = List(
+      q"import outwatch.dom.{VDomModifier, VNode}",
+      q"import outwatch.dom.dsl.cls"
+    )
+
+    override def C =
+      q"""
+        object C extends Classes[VDomModifier] {
+          protected override def op(clz: String) = cls := clz
+        }
+        """
+
+    override def implicitClass =
+      q"""
+        implicit class ConvertableToTagOfExtensionMethods(self: VNode) extends Classes[VNode] {
+          protected override def op(clz: String): VNode = self(cls := clz)
+        }
+        """
+  }
 }
